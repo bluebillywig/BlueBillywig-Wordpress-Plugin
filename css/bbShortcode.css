@@ -1,0 +1,10 @@
+#bb-video-library-shortcode-wrapper{
+    padding: 20px;
+    padding-top: 5px;
+    max-width: 400px;;
+    background: #bcbcbc;
+    
+}
+#bb-video-library-shortcode-wrapper h4{
+    font-size: 20px;
+}

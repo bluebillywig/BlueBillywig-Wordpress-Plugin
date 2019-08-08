@@ -1,0 +1,26 @@
+.bb-thumbnail-wrapper{
+    width: 300px;
+    height: 150px;
+
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    
+    border-style: solid;
+    border-width: 3px;
+    border-color: #bfbfbf;
+}
+
+.bb-thumbnail-title{
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #3f3f3fc9;
+    color: white;
+
+    padding-left: 5px;
+    padding-right: 5px;
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
