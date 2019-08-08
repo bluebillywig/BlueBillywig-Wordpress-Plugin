@@ -67,6 +67,7 @@ class BlueBillywig
 	//Update the shared secret of the RPC when the API settings were updated
 	public function update_rpc(){
 		if(!$this->rpc){ return; }
+		$this->rpc->host = 'https://' . $this->options[BB_API_SETTINGS_PUBLICATION] . '.bbvms.com';
 		$this->rpc->sharedSecret = $this->options[BB_API_SETTINGS_ID] . '-' . $this->options[BB_API_SETTINGS_SECRET];
 	}
 	
@@ -81,18 +82,18 @@ class BlueBillywig
 	//Retreive our RPC
 	public function get_rpc(){
 		if( $this->rpc == null){
-			$bbOptions = get_option(BB_API_SETTINGS_GROUP);
-			$this->create_rpc($bbOptions[BB_API_SETTINGS_PUBLICATION], $bbOptions[BB_API_SETTINGS_SECRET], $bbOptions[BB_API_SETTINGS_ID]);
+			$this->create_rpc($this->options[BB_API_SETTINGS_PUBLICATION], $this->options[BB_API_SETTINGS_SECRET], $this->options[BB_API_SETTINGS_ID]);
 		}	
 		return $this->rpc;
 	}
 	
 	//Test API key values by trying to retreive the publication info
 	public function test_api_key($publication, $secret, $id){
-		if( $this->rpc == null){
-			$this->create_rpc($publication, $secret, $id);
+		$publicationInfo = $this->get_rpc()->xml('publication');
+		if(!$publicationInfo){
+			return false;
 		}
-		return stripos($this->rpc->xml('publication'), 'Invalid token') === false;
+		return stripos($publicationInfo, 'Invalid token') === false;
 	}
 
 	//Test the stored API key by trying to retreive the publication info
