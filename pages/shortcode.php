@@ -1,8 +1,8 @@
 <?php
     if(!BlueBillywig::instance()->test_stored_api_key()){
         echo "<div class='notice notice-error is-dismissible'>
-                <h3>" . BB_SHORTCODE_STRINGS['VALIDATE_API_FAIL_TITLE'] . "</h3>
-                <p>" . BB_SHORTCODE_STRINGS['VALIDATE_API_FAIL_LABEL'] .  "</p>
+                <h3>" . BB_STRINGS['VALIDATE_API_FAIL_TITLE'] . "</h3>
+                <p>" . BB_STRINGS['VALIDATE_API_FAIL_LABEL'] .  "</p>
             </div>";
         die;
     }
