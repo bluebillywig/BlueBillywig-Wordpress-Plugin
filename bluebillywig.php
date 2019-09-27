@@ -45,6 +45,7 @@ require_once BB_PLUGIN_INC . "strings.php";
 require_once BB_PLUGIN_INC . "content.php";
 require_once BB_PLUGIN_INC . 'rpcPackage.php';
 require_once BB_PLUGIN_INC . 'util.php';
+require_once BB_PLUGIN_INC . 'classes/mediaclip.class.php';
 use BlueBillywig\VMSRPC\RPC;
 
 class BlueBillywig

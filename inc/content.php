@@ -118,13 +118,14 @@ function fetch_all_playouts(){
 }
 
 function build_mediaclip_preview($mediaclip, $options, $width = 300, $height = 150, $clickAction = 'selectClip', $class = 'bb-thumbnail-wrapper'){
-	$clipId = isset($mediaclip->id) ? $mediaclip->id : $mediaclip['id'];
+	$clipId = is_array($mediaclip) ? $mediaclip['id'] : $mediaclip->id;
 	$clipTitle = isset($mediaclip->title) ? $mediaclip->title : 
 				(is_array($mediaclip) && isset($mediaclip['title']) ? $mediaclip['title'] : 'Untitled video');
 	$clipThumbnail = isset($mediaclip->mainthumbnail_string) ? $mediaclip->mainthumbnail_string : 
 					(is_array($mediaclip) && isset($mediaclip['mainthumbnail_string']) ? $mediaclip['mainthumbnail_string'] : NULL);
-
-	if(!isset($clipThumbnail) && isset($mediaclip['thumbnails']) && count($mediaclip['thumbnails']) > 0){ // Final thumbnail faillback
+	
+	// Final thumbnail faillback
+	if(!isset($clipThumbnail) && is_array($mediaclip) && isset($mediaclip['thumbnails']) && count($mediaclip['thumbnails']) > 0){
 		$clipThumbnail = $mediaclip['thumbnails'][0]['src'];
 	}
 

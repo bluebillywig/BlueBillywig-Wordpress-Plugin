@@ -1,7 +1,11 @@
 <br/>
 <script>
     function editClip(clipId, event){
-        window.location.href = '?page=' + "<?PHP echo $_GET['page'] ?>" + "&mediaclipId=" + clipId;
+        window.location.href = '?page=' + "<?PHP
+
+use BlueBillywig\Classes\Mediaclip;
+
+echo $_GET['page'] ?>" + "&mediaclipId=" + clipId;
     }
 
     $ = jQuery;
@@ -37,26 +41,21 @@
                 notice_success($actionResponse);
             }
         }else{
-            $properties = array(
-                'query' => 'type:mediaclip AND status:published AND id:' . $mediaclipId . '',
-                'limit' => '1'
-            );
-            
-            // Search action
-            $metadata = json_decode(BlueBillywig::instance()->get_rpc()->json('mediaclip', $mediaclipId), true);
+            $mediaclip = Mediaclip::from_remote($mediaclipId);
         }
     }
 
     // A clip is selected, show meta data fields
-    if(isset($metadata)){
+    if(isset($mediaclip)){
 
-        if(isset($metadata['transcodingFinished']) && !$metadata['transcodingFinished']){
+        if(isset($mediaclip->metadata['transcodingFinished']) && !$mediaclip->metadata['transcodingFinished']){
             notice_message('This mediaclip is currently still transcoding');
         }
 
         // A submission was made with metadata
         if(isset($_REQUEST['submit'])){
-            $updateResponse = update_mediaclip_metadata($mediaclipId, generate_request_array(array('page', 'mediaclipId', 'submit')));
+            $mediaclip->set_metadata( strip_mediaclip_metadata($_REQUEST, array('page', 'mediaclipId', 'submit')));
+            $updateResponse = $mediaclip->save_metadata();
 
             // Metadata update request was made and we received a response
             if(isset($updateResponse)){
@@ -69,35 +68,32 @@
             }
             
             //Populate metadata with request values in case the update was still processing when retreiving the video's metadata
-            $metadata['cat'] = tags_as_array($_REQUEST['cat']);
-            $metadata['title'] = $_REQUEST['title'];
-            $metadata['description'] = $_REQUEST['description'];
-            $metadata['author'] = $_REQUEST['author'];
-            $metadata['copyrightSort'] = $_REQUEST['copyright'];
-            $metadata['status'] = $_REQUEST['status'];
+            // $metadata['cat'] = tags_as_array($_REQUEST['cat']);
+            // $metadata['title'] = $_REQUEST['title'];
+            // $metadata['description'] = $_REQUEST['description'];
+            // $metadata['author'] = $_REQUEST['author'];
+            // $metadata['copyrightSort'] = $_REQUEST['copyright'];
+            // $metadata['status'] = $_REQUEST['status'];
         }
-
-        // Make sure the meta data fields are known
-        $metadata = ensure_meta_data($metadata, array('cat', 'title', 'description', 'author', 'copyrightSort', 'status'));
 
         echo '<div class="bb-action-bar">
                 <a class="bb-back" href="?page=' . $_GET['page'] . '">< Back to overview</a>
-                <a class="bb-view" target="_blank" href="' . $metadata['gendeeplink'] . '">Preview Mediaclip</a>
+                <a class="bb-view" target="_blank" href="' . $mediaclip->metadata['gendeeplink'] . '">Preview Mediaclip</a>
             </div>';
-        echo build_mediaclip_preview($metadata, BlueBillywig::instance()->get_api_options(), 300, 150, '', 'bb-thumbnail-wrapper static');
+        echo build_mediaclip_preview($mediaclip, BlueBillywig::instance()->get_api_options(), 300, 150, '', 'bb-thumbnail-wrapper static');
         
         // Render meta data form
         render_form_start("Edit clip metadata");
             render_setting_group_row('Mediaclip Metadata', '');
-            render_setting_string('Mediaclip title', 'title', $metadata['title'], 'Title of your mediaclip');
-            render_setting_string('Mediaclip description', 'description', $metadata['description'], 'Description of your mediaclip');
-            render_setting_string('Author', 'author', $metadata['author'], 'The author of the mediaclip');
-            render_setting_string('Copyright', 'copyright', $metadata['copyrightSort'], 'Copyright holder of the mediaclip');
-            render_setting_string('Tags', 'cat', implode(', ', $metadata['cat']), 'Mediaclip tags (seperated by a comma)');
+            render_setting_string('Mediaclip title', 'title', $mediaclip->title, 'Title of your mediaclip');
+            render_setting_string('Mediaclip description', 'description', $mediaclip->description, 'Description of your mediaclip');
+            render_setting_string('Author', 'author', $mediaclip->author, 'The author of the mediaclip');
+            render_setting_string('Copyright', 'copyright', $mediaclip->copyright, 'Copyright holder of the mediaclip');
+            render_setting_string('Tags', 'cat', implode(', ', $mediaclip->tags), 'Mediaclip tags (seperated by a comma)');
             render_setting_dropdown('Status', 'status', array(
                 'Published' => 'published',
                 'Draft' => 'draft'
-            ), $metadata['status'], 'Visibility status of the mediaclip');
+            ), $mediaclip->status, 'Visibility status of the mediaclip');
             render_setting_submit_button('Save Metadata');
             render_setting_group_row('Mediaclip actions', '');
             render_setting_button('Delete Mediaclip', 'bb-delete-media-clip-button', 'Deletes the Mediaclip from the Blue Billywig OVP');

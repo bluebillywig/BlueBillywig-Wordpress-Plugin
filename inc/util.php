@@ -115,7 +115,7 @@
         return $tags;
     }
 
-    function strip_mediaclip_metadata(&$metadata, $stripList){
+    function strip_mediaclip_metadata($metadata, $stripList){
         foreach($metadata as $metaKey => $metaValue){
             foreach($stripList as $targetKey){
                 if($metaKey == $targetKey){
@@ -123,5 +123,6 @@
                 }
             }
         }
+        return $metadata;
     }
 ?>
