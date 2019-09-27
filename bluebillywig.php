@@ -47,6 +47,7 @@ require_once BB_PLUGIN_INC . 'rpcPackage.php';
 require_once BB_PLUGIN_INC . 'util.php';
 require_once BB_PLUGIN_INC . 'classes/mediaclip.class.php';
 use BlueBillywig\VMSRPC\RPC;
+use BlueBillywig\Classes\Page;
 
 class BlueBillywig
 {
@@ -55,6 +56,9 @@ class BlueBillywig
 	private $apiOptions;
 	private $pluginOptions;
 	private $rpc;
+	private $pages = array(
+		new Page('bb-test', 'Test Page')
+	);
 
 	//Singleton
 	public static function instance(){
@@ -249,6 +253,11 @@ function register_menus() {
 	add_submenu_page( 'bb-plugin', 'Media Library', 'Media Library', 'manage_options', 'bb-library', 'page_media_library' );
 	add_submenu_page( 'bb-plugin', 'Upload Mediaclip', 'Upload Mediaclip', 'manage_options', 'bb-upload', 'page_upload' );
 	add_submenu_page( 'bb-plugin', 'Generate Shortcode', 'Generate Shortcode', 'manage_options', 'bb-shortcode', 'page_shortcode' );
+
+	foreach($this->pages as $page)
+	{
+		add_submenu_page($page->id, $page->name, '', 'manage_options', $page->name);
+	}
 
 	if( is_plugin_active(get_top_level_plugin_dir_name(dirname(__FILE__)) . '/bluebillywig.php') && 
 		is_on_plugins_page() && !BlueBillywig::instance()->test_stored_api_key()) {
