@@ -83,12 +83,15 @@ class RPC
      * @return array|bool
      * @throws Exception
      */
-    public function doAction($entity,$action,$arProps)
+    public function doAction($entity,$action,$arProps, $useSAPI = false)
     {
         VMSUtil::debugmsg("doAction called with entity $entity and action $action","vmsrpc");
 
-
-        $uri='/api/' . $entity . '?action=' . $action;
+        if($useSAPI){
+            $uri='/sapi/' . $entity . '?action=' . $action;
+        }else{
+            $uri='/api/' . $entity . '?action=' . $action;
+        }
         $response=$this->processResponse($this->fetch($uri,$arProps));
         return $response;
     }
@@ -107,7 +110,7 @@ class RPC
             $uri='/api/' . $entity . '?action=get' . '&id=' . $objectId;
         }
         else {
-            $uri='/api/' . $entity;
+            $uri='/sapi/' . $entity;
         }
         if(! isset($arProps['action'])) {
             // default action is get for this method
@@ -149,7 +152,7 @@ class RPC
      * @return bool|mixed
      * @throws Exception
      */
-    public function sapi($entity,$objectId=null, $action = "GET", $arProps=null, $entityAction = null, $urlParameters = null)
+    public function sapi($entity,$objectId=null, $action = "GET", $arProps=array(), $entityAction = null, $urlParameters = null)
     {
         VMSUtil::debugmsg("json called with entity $entity and objectId $objectId","vmsrpc");
         if(isset($objectId) && is_numeric($objectId)) {
@@ -165,7 +168,10 @@ class RPC
             }
         }
 
-        VMSUtil::debugmsg("will call fetch with uri $uri and properties: $arProps","vmsrpc");
+        if(is_array($arProps) && isset($arProps))
+            VMSUtil::debugmsg("will call fetch with uri $uri and properties: " . implode('\r\n', $arProps),"vmsrpc");
+        else
+            VMSUtil::debugmsg("will call fetch with uri $uri and properties: " . $arProps, "vmsrpc");
         $response=$this->fetch($uri,$arProps, $action);
         return $response;
     }
@@ -191,6 +197,21 @@ class RPC
         VMSUtil::debugmsg("will call fetch","vmsrpc");
         $response=$this->fetch($uri, NULL);
         return $response;
+    }
+
+    public function curi($path)
+    {
+        if(strlen($path) > 0 && substr($path, 0, 1) !== '/'){
+            $path = '/' . $path;
+        }
+        VMSUtil::debugmsg("Making call on path: $path","vmsrpc");
+        $response=$this->fetch($path, NULL);
+        return $response;
+    }
+
+    public function getHost()
+    {
+        return $this->host;
     }
 
     /**

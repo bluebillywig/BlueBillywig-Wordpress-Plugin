@@ -1,0 +1,90 @@
+#wpcontent{
+    padding-right: 20px; /* Match left padding on right side */
+}
+#bb-progress-wrapper{
+    display: none;
+}
+#bb-progressbar-wrapper{
+    display: none;
+
+    position: relative;
+    width: 100%;
+    height: 40px;
+    background-color: #CCC;
+
+    margin-top: 10px;
+
+    border: solid 1px #878787;
+}
+#bb-progressbar-amount{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    z-index: 2;
+    font-size: 16px;
+    line-height: 40px
+}
+#bb-progressbar-fill{
+    position: relative;
+    width: 0%;
+    height: 100%;
+    background-color: #7AB1DF;
+    transition: background-color .65s;
+}
+
+#bb-upload-notice{
+    display: none;
+
+    background: #e4e4e4;
+    position: relative;
+    margin-top: 20px;
+    border: solid 2px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: sans-serif;
+    
+    transition: border-color .5s;
+}
+#bb-upload-notice span{
+    position: relative;
+    text-align: right;
+    float: right;
+}
+#bb-upload-notice span:hover{
+    cursor: pointer;
+    color: gray;
+}
+
+#bb-start-upload-button{
+    margin: 15px 0px;
+}
+#bb-cancel-upload-button{
+    background: rgb(233, 110, 126);
+    color: white;
+}
+#bb-pause-upload-button{
+    background: rgb(209, 154, 52);
+    color: white;
+}
+#bb-pause-upload-button.active{
+    background: #B7D26B;
+    color: white;
+}
+
+#bb-upload-controls{
+    display: none;
+    background: #e4e4e4;
+    vertical-align: middle;
+    padding: 12px 10px 20px 10px;
+    min-height: 18px;
+}
+#bb-upload-controls button{
+    float: left;
+    display: inline-block;
+}
+#bb-upload-controls button + button{
+    margin-left: 10px;
+}
+#bb-progressbar-action{
+    padding-left: 10px;
+}

@@ -12,7 +12,13 @@ define('BB_STRINGS', array(
     "API_SETTINGS_API_TITLE" => "API Options",
     "API_SETTINGS_API_LABEL" => "You can find your API key in Blue Billywig OVP > User (top-right) > Publication  > API keys (left sidebar) > (select api key)",
     "API_SETTINGS_API_SECRET_TITLE" => "API-Secret",
-    "API_SETTINGS_API_ID_TITLE" => "API-ID"
+    "API_SETTINGS_API_ID_TITLE" => "API-ID",
+    "SETTINGS_PLUGIN_TITLE" => "Plugin Settings",
+    "SETTINGS_PLUGIN_LABEL" => "Change the behaviour of the plugin",
+    "SETTINGS_PLUGIN_SUPRESS_NOTICE_TITLE" => "Suppress plugin notices",
+    "SETTINGS_PLUGIN_AUTOPLAY_TITLE" => "Autoplay default",
+    "SETTINGS_PLUGIN_AUTOPUBLISH_TITLE" => "Default mediaclip status",
+    "SETTINGS_PLUGIN_AUTOPUBLISH_LABEL" => "When uploading a mediaclip, this will be the clip's status"
 ));
 
 define('BB_SHORTCODE_STRINGS', array(
@@ -33,7 +39,7 @@ define('BB_SHORTCODE_STRINGS', array(
     "ELEMENT_ID_LIBRARY_SHORTCODE_PLAYOUT" => "bb-video-library-playout",
     "FEEDBACK_SEARCHING" => "Searching...",
     "FEEDBACK_NO_VIDEOS" => "No videos found",
-    "FEEDBACK_SELECT_MEDIACLIP" => "Select a mediaclip to embed",
+    "FEEDBACK_SELECT_MEDIACLIP" => "Select a mediaclip",
     "FEEDBACK_ERROR" => "Error while trying to find videos",
 ));
 
