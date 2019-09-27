@@ -1,11 +1,7 @@
 <br/>
 <script>
     function editClip(clipId, event){
-        window.location.href = '?page=' + "<?PHP
-
-use BlueBillywig\Classes\Mediaclip;
-
-echo $_GET['page'] ?>" + "&mediaclipId=" + clipId;
+        window.location.href = '?page=' + "<?PHP echo $_GET['page'] ?>" + "&mediaclipId=" + clipId;
     }
 
     $ = jQuery;
@@ -24,6 +20,8 @@ echo $_GET['page'] ?>" + "&mediaclipId=" + clipId;
 </script>
 
 <?PHP
+    use BlueBillywig\Classes\Mediaclip;
+
     $mediaclipId = isset($_GET['mediaclipId']) ? $_GET['mediaclipId'] : -1;
 
     if($mediaclipId > 0){
@@ -48,8 +46,8 @@ echo $_GET['page'] ?>" + "&mediaclipId=" + clipId;
     // A clip is selected, show meta data fields
     if(isset($mediaclip)){
 
-        if(isset($mediaclip->metadata['transcodingFinished']) && !$mediaclip->metadata['transcodingFinished']){
-            notice_message('This mediaclip is currently still transcoding');
+        if($mediaclip->is_transcoding()){
+            notice_warning('This mediaclip is currently still transcoding');
         }
 
         // A submission was made with metadata
@@ -66,20 +64,20 @@ echo $_GET['page'] ?>" + "&mediaclipId=" + clipId;
                     notice_error('Something went wrong try to update mediaclip. <b>' . $updateResponse['code'] . '</b>: <i>' . $updateResponse['body'] . '</i>');
                 }
             }
-            
-            //Populate metadata with request values in case the update was still processing when retreiving the video's metadata
-            // $metadata['cat'] = tags_as_array($_REQUEST['cat']);
-            // $metadata['title'] = $_REQUEST['title'];
-            // $metadata['description'] = $_REQUEST['description'];
-            // $metadata['author'] = $_REQUEST['author'];
-            // $metadata['copyrightSort'] = $_REQUEST['copyright'];
-            // $metadata['status'] = $_REQUEST['status'];
         }
 
         echo '<div class="bb-action-bar">
-                <a class="bb-back" href="?page=' . $_GET['page'] . '">< Back to overview</a>
-                <a class="bb-view" target="_blank" href="' . $mediaclip->metadata['gendeeplink'] . '">Preview Mediaclip</a>
-            </div>';
+                <a class="bb-back" href="?page=' . $_GET['page'] . '">< Back to Media Library</a>';
+        if($mediaclip->is_transcoding())
+            echo '<span class="bb-view" href="#">Please wait untill transcoding is finished to preview clip</span>';
+        else if($mediaclip->status === 'published')
+            echo '<a class="bb-view" target="_blank" href="' . $mediaclip->get_preview_url() . '">Preview Mediaclip</a>';
+        else
+            echo '<span class="bb-view" href="#">Set status to <i>Published</i> to preview clip</span>';
+        echo '</div>';
+
+        render_notices();  
+
         echo build_mediaclip_preview($mediaclip, BlueBillywig::instance()->get_api_options(), 300, 150, '', 'bb-thumbnail-wrapper static');
         
         // Render meta data form
@@ -99,8 +97,7 @@ echo $_GET['page'] ?>" + "&mediaclipId=" + clipId;
             render_setting_button('Delete Mediaclip', 'bb-delete-media-clip-button', 'Deletes the Mediaclip from the Blue Billywig OVP');
             render_setting_button('Purge Mediaclip', 'bb-purge-media-clip-button', '<b>(PERMANENT)</b> Purges the mediaclip from the OVP and marks the source file for deletion');
         render_form_end();
-        
-        render_notices();        
+              
     }else{
         render_notices();
         

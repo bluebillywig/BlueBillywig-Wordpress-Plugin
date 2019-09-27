@@ -9,7 +9,7 @@
         render_setting_dropdown('Status', 'status', array(
             'Published' => 'published',
             'Draft' => 'draft'
-        ), $defaultStatus ? 'published' : 'draft', 'Visibility status of the mediaclip');
+        ), $defaultStatus ? 'published' : 'draft', '(required) Visibility status of the mediaclip');
         render_setting_file('Video file', 'bb-upload-file', '(required) Source file for the mediaclip');
     render_form_end();
 

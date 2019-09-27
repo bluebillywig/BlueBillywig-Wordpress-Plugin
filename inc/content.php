@@ -161,6 +161,15 @@ function notice_message($message){
 		</div>');
 }
 
+function notice_warning($message){
+	if(!isset($GLOBALS['bb-notices'])){
+		$GLOBALS['bb-notices'] = array();
+	}
+	array_push($GLOBALS['bb-notices'], '<div class="notice notice-warning is-dismissible">
+			<p>' . $message . '</p>
+		</div>');
+}
+
 function notice_error($message){
 	if(!isset($GLOBALS['bb-notices'])){
 		$GLOBALS['bb-notices'] = array();
@@ -218,7 +227,7 @@ if($value === NULL){
 	<tr>
 		<th><span><?php echo $title ?></span></th>
 		<td><input id="<?php echo $name; ?>" name="<?php echo $name; ?>" type="text" size="50" value="<?php echo $value; ?>"></td>            
-		<td><?php echo $description; ?></td>
+		<td class="description"><?php echo $description; ?></td>
 	</tr>   
 <?php
 }
@@ -239,7 +248,7 @@ if(!isset($values) || !is_array($values)){
 			?>
 			</select>
 		</td>         
-		<td><?php echo $description; ?></td>
+		<td class="description"><?php echo $description; ?></td>
 	</tr>
 <?php
 }
@@ -273,7 +282,7 @@ function render_setting_file($title, $name, $description){
 		<td>
 			<input id="<?php echo $name; ?>" type="file" name="<?php echo $name; ?>"/>
 		</td>       
-		<td><?php echo $description; ?></td>
+		<td class="description"><?php echo $description; ?></td>
 	</tr>
 <?php
 }
@@ -295,7 +304,7 @@ function render_setting_button($buttonText, $id, $description = '', $isPrimary =
 		<th class="no-background">
 			<button type="button" id="<?php echo $id ?>" class="button <?php if($isPrimary) echo 'button-primary' ?>"><?php echo $buttonText;?></button>
 		</th>   
-		<td><?php echo $description; ?></td>
+		<td class="description"><?php echo $description; ?></td>
 	</tr>
 <?php
 }

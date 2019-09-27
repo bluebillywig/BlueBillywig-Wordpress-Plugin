@@ -18,7 +18,7 @@
     text-decoration: none;
 }
 
-.bb-view::after{
+a.bb-view::after{
     float: right;
     margin-left: 5px;
     content: "";
@@ -36,4 +36,8 @@
 #bb-purge-media-clip-button{
     background: rgb(214, 62, 62);
     color: white;
+}
+
+.notice{
+    margin-bottom: 20px;
 }

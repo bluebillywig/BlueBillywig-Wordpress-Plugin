@@ -11,6 +11,12 @@
     background: #e4e4e4;
 }
 
+.form-table .description{
+    background: #ededed;
+    padding: 3px;
+    font-style: italic;
+}
+
 .form-table td{
     padding: 0px 0px;
     padding-left: 5px;

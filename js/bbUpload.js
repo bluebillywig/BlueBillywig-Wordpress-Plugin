@@ -46,7 +46,7 @@ function initUpload () {
     if ( !titleField.val() || !fileSelect.val() ) {
         var missing = 'Missing the following values for upload:';
         missing += !titleField.val() ? "<br/><b>- Title</b>" : '';
-        missing += !fileSelect.val() ? "<br/><b>- Source File</b>" : '';
+        missing += !fileSelect.val() ? "<br/><b>- Video File</b>" : '';
         showNotice( missing, 'error' );
         return;
     }

@@ -15,10 +15,6 @@ define('PROPERTY_DEFAULTS', array(
 
 class Mediaclip
 {
-    public function &getAuthor(){
-        return $this->author;
-    }
-
     public $id;
     public $title;
     public $description;
@@ -26,10 +22,8 @@ class Mediaclip
     public $copyright;
     public $tags;
     public $status;
-
     public $metadata;
 
-    // Links XML meta data values with instance properties
     private $METADATA_PROPERTY_DICTIONARY;
 
     public function __construct($id = 0, $title = null, $description = null, $author = null, $copyright = null, $tags = array(), $status = 1)
@@ -42,13 +36,14 @@ class Mediaclip
         $this->tags =           $tags        ?? PROPERTY_DEFAULTS['tags'];
         $this->status =         $status      ?? PROPERTY_DEFAULTS['status'];
 
-        // Links xml property names with object properties
+        // Links database propertiy names with object properties
         $this->METADATA_PROPERTY_DICTIONARY = array(
             'id' => &$this->id,
             'title' => &$this->title,
             'description' => &$this->description,
             'author' => &$this->author,
             'copyright' => &$this->copyright,
+            'copyrightSort' => &$this->copyright,
             'cat' => &$this->tags,
             'status' => &$this->status
         );
@@ -94,16 +89,26 @@ class Mediaclip
     }
 
     public function load_metadata()
-    {        
-        $metadata = json_decode(BlueBillywig::instance()->get_rpc()->json('mediaclip', $this->id), true);
+    {         
+        $properties = array(
+			'query' => 'type:mediaclip AND id:' . $this->id,
+			'limit' => '1'
+		);
+        $search_result = json_decode(BlueBillywig::instance()->get_rpc()->json('search', null, $properties), true);
+        $metadata = $search_result['count'] > 0 ? $search_result['items'][0] : NULL;
+
+        if($metadata === NULL)
+        {
+            return 'Could not find mediaclip with id ' . $this->id;
+        }
 
         $this->id =             $metadata['id'];
-        $this->title =          $metadata['title']       ??  PROPERTY_DEFAULTS['title'];
-        $this->description =    $metadata['description'] ??  PROPERTY_DEFAULTS['description'];
-        $this->author =         $metadata['author']      ??  PROPERTY_DEFAULTS['author'];
-        $this->copyright =      $metadata['copyright']   ??  PROPERTY_DEFAULTS['copyright'];
-        $this->tags =           $metadata['cat']         ??  PROPERTY_DEFAULTS['cat'];
-        $this->status =         $metadata['status']      ??  PROPERTY_DEFAULTS['status'];
+        $this->title =          $metadata['title']          ??  PROPERTY_DEFAULTS['title'];
+        $this->description =    $metadata['description']    ??  PROPERTY_DEFAULTS['description'];
+        $this->author =         $metadata['author']         ??  PROPERTY_DEFAULTS['author'];
+        $this->copyright =      $metadata['copyrightSort']  ??  PROPERTY_DEFAULTS['copyright'];
+        $this->tags =           $metadata['cat']            ??  PROPERTY_DEFAULTS['cat'];
+        $this->status =         $metadata['status']         ??  PROPERTY_DEFAULTS['status'];
         $this->metadata =       $metadata;
 
         return $metadata;
@@ -118,6 +123,24 @@ class Mediaclip
         $response = $rpc->doAction('mediaclip', 'put', $properties);
 
         return $response;
+    }
+
+    public function get_preview_url()
+    {
+        $host = BlueBillywig::instance()->get_rpc()->getHost();
+        return $host . '/view/default/' . $this->id . '.html';
+    }
+
+    public function is_transcoding()
+    {
+        if(array_key_exists('assets', $this->metadata))
+        {
+            if($this->metadata['assets'] === 'null')
+                return true;
+            if(is_array($this->metadata['assets']) && count($this->metadata['assets']) == 0)
+                return true;
+        }
+        return false;
     }
 
     private function get_metadata_as_xml()
