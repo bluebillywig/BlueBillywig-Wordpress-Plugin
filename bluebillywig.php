@@ -42,6 +42,7 @@ define('BB_PLUGIN_SETTINGS_DEFAULT', array(	BB_PLUGIN_SETTING_SUPPRESS_NOTICES =
 											BB_PLUGIN_SETTING_AUTOPUBLISH => 'true',
 											BB_PLUGIN_SETTING_USE_IFRAME_EMBED => 'false'));
 
+
 require_once BB_PLUGIN_INC . 'uploader.php';
 require_once BB_PLUGIN_INC . "strings.php";
 require_once BB_PLUGIN_INC . "content.php";
@@ -194,7 +195,6 @@ function page_home(){
 	echo '</span>';
 
 	wp_enqueue_script('bb-settings-script', BB_PLUGIN_JS . 'bbSettings.js');
-
 	wp_enqueue_style('bb-shortcode-style', BB_PLUGIN_CSS . 'bbSettings.css');
 
 	require_once BB_PLUGIN_PAGES . 'settings.php';

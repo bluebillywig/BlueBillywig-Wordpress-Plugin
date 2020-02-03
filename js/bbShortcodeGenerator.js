@@ -54,6 +54,10 @@ function updateShortcode () {
         shortcode += ' autoplay="true"'
     }
     shortcode += ']';
+<<<<<<< HEAD
     shortcodeContainer.innerHTML = shortcode;
+=======
+    shortcodeContainer.value = shortcode;
+>>>>>>> 8d3eeabbb1d3e8bf5e6f33a6e065fe1719d24b30
     shortcodeWrapper.style.display = "block";
 }

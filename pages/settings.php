@@ -65,7 +65,6 @@
 ?>
 <div class='wrap'>
 <?php
-
     render_form_start(BB_STRINGS['API_SETTINGS_TITLE']);
         render_setting_group_row(BB_STRINGS['API_SETTINGS_API_TITLE'], BB_STRINGS['API_SETTINGS_API_LABEL']);
         render_setting_string(  BB_STRINGS['API_SETTINGS_API_SECRET_TITLE'], BB_API_SETTINGS_SECRET, $bbAPIOptions[BB_API_SETTINGS_SECRET],
