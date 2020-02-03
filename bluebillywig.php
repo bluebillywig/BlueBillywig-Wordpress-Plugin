@@ -15,7 +15,7 @@ Author URI: http://daanruiter.net/
 // Include wp interface when testing plugin output
 // require_once(dirname( __FILE__ ) . '/inc/wpInterface.php');
 
-define('BB_PLUGIN_VERSION', '0.3.0');
+define('BB_PLUGIN_VERSION', '0.3.1');
 define('BB_PLUGIN_BETA', true);
 define('BB_PLUGIN_DIR', dirname( __FILE__ ));
 define('BB_PLUGIN_IMG', plugin_dir_url( __FILE__ ) .'/img/');
