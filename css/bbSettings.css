@@ -1,0 +1,45 @@
+.bb-logo-large{
+    padding: 15px;
+}
+
+.form-table{
+    max-width: 1200px;
+}
+
+.form-table th{
+    padding: 5px 10px;
+    max-width: 300px;
+}
+
+.form-table th:not(.no-background){
+    background: #e4e4e4;
+}
+
+.form-table .description{
+    background: #ededed;
+    padding: 3px;
+    font-style: italic;
+}
+
+.form-table td{
+    padding: 0px 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background: #f1f1f1;
+}
+.form-table td input{
+    width: 100%;
+}
+
+.form-table p{
+    padding-bottom: 5px;
+}
+
+.form-table h2{
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+select[unsaved-setting="true"], input[unsaved-setting="true"] { 
+    background: rgb(251, 250, 187);
+}

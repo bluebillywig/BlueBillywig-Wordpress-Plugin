@@ -1,25 +1,17 @@
 var $ = jQuery;
+$( document ).ready( initBBLibrary );
 
-$( document ).ready( onload );
+// Begin Script
 
-var searchButton, searchInput, playoutSelection, searchResetButton;
+const CLIP_SELECT_EVENT = new CustomEvent( 'clipselected', { clipID: 0 } );
+
 var libraryWrapper;
-var shortcodeContainer, shortcodeWrapper;
-var initialized = false;
+var focusClipOnClick = false;
 
-//selection
-var selectedClipID, selectedPlayout;
-
-function onload () {
-    if ( initialized ) return;
-
+function initBBLibrary () {
     searchInput = document.getElementById( BB_STRINGS[ 'ELEMENT_ID_SEARCH_INPUT' ] );
     searchButton = document.getElementById( BB_STRINGS[ 'ELEMENT_ID_SEARCH_SUBMIT' ] );
-    searchResetButton = document.getElementById( BB_STRINGS[ 'ELEMENT_ID_SEARCH_RESET' ] );
     libraryWrapper = document.getElementById( BB_STRINGS[ 'ELEMENT_ID_LIBRARY_WRAPPER' ] );
-    shortcodeContainer = document.getElementById( BB_STRINGS[ 'ELEMENT_ID_LIBRARY_SHORTCODE' ] );
-    shortcodeWrapper = document.getElementById( BB_STRINGS[ 'ELEMENT_ID_LIBRARY_SHORTCODE_WRAPPER' ] );
-    playoutSelection = document.getElementById( BB_STRINGS[ 'ELEMENT_ID_LIBRARY_SHORTCODE_PLAYOUT' ] );
 
     searchInput.addEventListener( "keydown", function ( e ) {
         if ( e.keyCode === 13 ) {
@@ -31,26 +23,12 @@ function onload () {
         searchVideos( searchInput.value );
     } );
 
-    searchResetButton.addEventListener( "click", function ( e ) {
-        clearLibraryWrapper();
-        selectedPlayout = defaultPlayout;
-        playoutSelection.value = selectedPlayout;
-        searchInput.value = "";
-    } );
-
-    playoutSelection.addEventListener( "change", function ( e ) {
-        selectedPlayout = e.target.value;
-        updateShortcode();
-    } );
-
     searchVideos( "" );
-
-    initialized = true;
 }
 
 function clearLibraryWrapper () {
-    shortcodeWrapper.style.display = "none";
-    selectedClipID = null;
+    // shortcodeWrapper.style.display = "none";
+    // selectedClipID = null;
 
     while ( libraryWrapper.firstChild ) {
         libraryWrapper.removeChild( libraryWrapper.firstChild );
@@ -64,7 +42,8 @@ function searchVideos ( query ) {
         url: ajaxurl,
         data: {
             'action': 'search_videos_request',
-            'query': query
+            'query': query,
+            'previewClickAction': typeof previewClickAction != 'undefined' ? previewClickAction : 'selectClip'
         },
         success: function ( data ) {
             if ( data == '' ) {
@@ -79,19 +58,23 @@ function searchVideos ( query ) {
     } );
 }
 
+function clearLibraryWrapper () {
+    // shortcodeWrapper.style.display = "none";
+    // selectedClipID = null;
+
+    while ( libraryWrapper.firstChild ) {
+        libraryWrapper.removeChild( libraryWrapper.firstChild );
+    }
+}
+
 function selectClip ( clipID, event ) {
     var selectedClip = event.target.tagName == "SPAN" ? event.target.parentElement : event.target;
 
-    clearLibraryWrapper();
-    libraryWrapper.append( selectedClip );
-    selectedClipID = clipID;
+    if ( focusClipOnClick ) {
+        clearLibraryWrapper();
+        libraryWrapper.append( selectedClip );
+    }
 
-    updateShortcode();
-}
-
-function updateShortcode () {
-    if ( !selectedClipID ) { return; }
-    var shortcode = '[bbmediaclip clipID="' + selectedClipID + '" playout="' + selectedPlayout + '"]';
-    shortcodeContainer.value = shortcode;
-    shortcodeWrapper.style.display = "block";
+    CLIP_SELECT_EVENT.clipID = clipID;
+    libraryWrapper.dispatchEvent( CLIP_SELECT_EVENT );
 }
