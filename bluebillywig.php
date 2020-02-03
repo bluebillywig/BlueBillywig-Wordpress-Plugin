@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Blue Billywig
- * @version 0.3.0
+ * @version 0.3.01
  */
 /*
 Plugin Name: Blue Billywig
 Plugin URI: https://github.com/DaanRuiter/BB_wordpress_plugin
 Description: Allows for easier embedding of mediaclips and playlists
 Author: Daan Ruiter
-Version: 0.3.0
+Version: 0.3.1
 Author URI: http://daanruiter.net/
 */
 
