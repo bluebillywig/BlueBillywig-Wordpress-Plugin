@@ -130,7 +130,7 @@ function onSubmit(rootElement) {
         query = inputs[0].value;
     }
 
-    searchVideos(rootElement, query);
+    searchForVideos(rootElement, query);
 }
 
 function clearVideos(rootElement) {
@@ -140,7 +140,7 @@ function clearVideos(rootElement) {
     }
 }
 
-function searchVideos(rootElement, query) {
+function searchForVideos(rootElement, query) {
     var wrapper = $(rootElement).find('.' + BB_STRINGS["ELEMENT_ID_LIBRARY_WRAPPER"]);
     $.ajax({
         url: ajaxurl,
