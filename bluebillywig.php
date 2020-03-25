@@ -104,7 +104,7 @@ class BlueBillywig
 		if (!$this->rpc) {
 			return;
 		}
-		$this->rpc->host = 'https://' . $this->apiOptions[BB_API_SETTINGS_PUBLICATION] . '.bbvms.com';
+		$this->rpc->host = '//' . $this->apiOptions[BB_API_SETTINGS_PUBLICATION] . '.bbvms.com';
 		$this->rpc->sharedSecret = $this->apiOptions[BB_API_SETTINGS_ID] . '-' . $this->apiOptions[BB_API_SETTINGS_SECRET];
 	}
 
@@ -233,15 +233,18 @@ function page_home()
 //Plugin Menu > Generate shortcode path
 function page_shortcode()
 {
+	if (!is_configured()) return;
+
 	//Load JS
 	$bbAPIOptions = BlueBillywig::instance()->get_api_options();
 	$autoplay = BlueBillywig::instance()->get_plugin_option(BB_PLUGIN_SETTING_AUTOPLAY) ? 'true' : 'false';
+	$playout = array_key_exists(BB_API_SETTINGS_DEFAULT_PLAYOUT, $bbAPIOptions) ? $bbAPIOptions[BB_API_SETTINGS_DEFAULT_PLAYOUT] : "default";
 
 	wp_enqueue_script('bb-mediaclip-library', BB_PLUGIN_JS . 'bbMediaclipLibrary.js');
 	wp_enqueue_script('bb-mediaclip-shortcode', BB_PLUGIN_JS . 'bbShortcodeGenerator.js');
 
 	wp_localize_script('bb-mediaclip-shortcode', 'defaultAutoplay', $autoplay);
-	wp_localize_script('bb-mediaclip-shortcode', 'defaultPlayout', $bbAPIOptions[BB_API_SETTINGS_DEFAULT_PLAYOUT]);
+	wp_localize_script('bb-mediaclip-shortcode', 'defaultPlayout', $playout);
 	wp_localize_script('bb-mediaclip-library', 'BB_STRINGS', BB_SHORTCODE_STRINGS);
 	wp_localize_script('bb-mediaclip-library', 'ajaxurl', admin_url('admin-ajax.php'));
 
@@ -254,14 +257,17 @@ function page_shortcode()
 
 function page_upload()
 {
+	if (!is_configured()) return;
+
 	$bbAPIOptions = BlueBillywig::instance()->get_api_options();
+	$publication = $bbAPIOptions[BB_API_SETTINGS_PUBLICATION];
 
 	wp_enqueue_script('aws-sdk', 'https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js'); //TODO: dl & include script
 	wp_enqueue_script('fine-uploader', BB_PLUGIN_JS . 'lib/fineUploader.modified.js');
 	wp_enqueue_script('bb-upload-script', BB_PLUGIN_JS . 'bbUpload.js', array('fine-uploader'));
 
 	wp_localize_script('bb-upload-script', 'ajaxurl', admin_url('admin-ajax.php'));
-	wp_localize_script('bb-upload-script', 'publicationStub', $bbAPIOptions[BB_API_SETTINGS_PUBLICATION]);
+	wp_localize_script('bb-upload-script', 'publicationStub', $publication);
 
 	wp_enqueue_style('bb-shortcode-style', BB_PLUGIN_CSS . 'bbSettings.css');
 	wp_enqueue_style('bb-upload-style', BB_PLUGIN_CSS . 'bbUpload.css');
@@ -271,6 +277,7 @@ function page_upload()
 
 function page_media_library()
 {
+	if (!is_configured()) return;
 
 	wp_enqueue_style('bb-mediaclip-block-style', BB_PLUGIN_CSS . 'bbVideoBlock.css');
 	wp_enqueue_style('bb-media-library-style', BB_PLUGIN_CSS . 'bbMediaLibrary.css');
@@ -281,7 +288,6 @@ function page_media_library()
 //Register Wordpress menus
 function register_menus()
 {
-
 	add_menu_page('Blue Billywig', 'Blue Billywig', 'manage_options', 'bb-plugin', 'page_home', BB_PLUGIN_IMG . 'icon.png');
 	add_submenu_page('bb-plugin', 'Settings', 'Settings', 'manage_options', 'bb-plugin');
 	add_submenu_page('bb-plugin', 'Media Library', 'Media Library', 'manage_options', 'bb-library', 'page_media_library');
@@ -292,7 +298,7 @@ function register_menus()
 		is_plugin_active(get_top_level_plugin_dir_name(dirname(__FILE__)) . '/bluebillywig.php') &&
 		is_on_plugins_page() && !BlueBillywig::instance()->test_stored_api_key()
 	) {
-		plugin_needs_configuration_notice();
+		plugin_needs_configuration_notice(BB_STRINGS["NOTICE_NO_VALID_API_KEY"]);
 	}
 }
 
@@ -316,11 +322,14 @@ function register_bb_mediaclip_block()
 
 function register_bb_mediaclip_block_assets()
 {
+	if (!is_configured()) return;
+
 	//Localize API-options & ajaxURL
 	$bbAPIOptions = BlueBillywig::instance()->get_api_options();
+	$publication = $bbAPIOptions[BB_API_SETTINGS_PUBLICATION];
 
 	wp_localize_script('bb-mediaclip-block', 'bbPluginData', array(
-		"publication" => $bbAPIOptions[BB_API_SETTINGS_PUBLICATION],
+		"publication" => $publication,
 		"allPlayouts" => fetch_all_playouts(),
 		"ajaxurl" => admin_url('admin-ajax.php'),
 		"strings" => BB_BLOCK_STRINGS
@@ -376,13 +385,16 @@ function add_mce_widget_script($plugin_array)
 	return $plugin_array;
 }
 
-function plugin_needs_configuration_notice()
+function plugin_needs_configuration_notice($message = null)
 {
 ?>
 	<div class="notice notice-error is-dismissible">
 		<p>Before you can start using the <span class="bb-plugin-name-notice">
 				<img src='<?PHP echo BB_PLUGIN_IMG . 'icon.png' ?>'> Blue Billywig plugin</span> it needs to be
 			<strong><a href="./admin.php?page=bb-plugin">configured</a></strong>.</p>
+		<?php if ($message !== null) {
+			echo "<br/><i>" . $message . "</i>";
+		} ?>
 	</div>
 	<style>
 		.bb-plugin-name-notice {
@@ -399,6 +411,23 @@ function plugin_needs_configuration_notice()
 		}
 	</style>
 <?php
+}
+
+function is_configured()
+{
+	$bbAPIOptions = BlueBillywig::instance()->get_api_options();
+	$publication = $bbAPIOptions[BB_API_SETTINGS_PUBLICATION];
+
+	if (empty($publication)) {
+		plugin_needs_configuration_notice(BB_STRINGS["NOTICE_NO_PUBLICATION"]);
+		return false;
+	}
+
+	if (!BlueBillywig::instance()->test_stored_api_key()) {
+		plugin_needs_configuration_notice(BB_STRINGS["NOTICE_NO_VALID_API_KEY"]);
+		return false;
+	}
+	return true;
 }
 
 add_action('admin_head', 'add_mce_widget');

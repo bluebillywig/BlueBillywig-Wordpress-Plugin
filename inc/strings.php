@@ -19,7 +19,9 @@ define('BB_STRINGS', array(
     "SETTINGS_PLUGIN_AUTOPLAY_TITLE" => "Autoplay default",
     "SETTINGS_PLUGIN_USE_IFRAME_EMBED" => "Wrap player inside an iframe",
     "SETTINGS_PLUGIN_AUTOPUBLISH_TITLE" => "Default mediaclip status",
-    "SETTINGS_PLUGIN_AUTOPUBLISH_LABEL" => "When uploading a mediaclip, this will be the clip's status"
+    "SETTINGS_PLUGIN_AUTOPUBLISH_LABEL" => "When uploading a mediaclip, this will be the clip's status",
+    "NOTICE_NO_PUBLICATION" => "Publication is not filled in",
+    "NOTICE_NO_VALID_API_KEY" => "API Key failed to validate",
 ));
 
 define('BB_SHORTCODE_STRINGS', array(
@@ -60,7 +62,7 @@ define('BB_BLOCK_STRINGS', array(
     "FEEDBACK_INVALID_ID" => "Video can't be found",
     "FEEDBACK_NO_VIDEOS" => BB_SHORTCODE_STRINGS["FEEDBACK_NO_VIDEOS"],
     "FEEDBACK_ERROR" => BB_SHORTCODE_STRINGS["FEEDBACK_ERROR"],
-)); 
+));
 
 define('BB_WIDGET_STRINGS', array(
     "WIDGET_ID" => "bb_mce_mediaclip",
@@ -76,4 +78,3 @@ define('BB_WIDGET_STRINGS', array(
     "ELEMENT_CLASS_FOUND_VIDEO" => "bb-widget-found-video",
     "ELEMENT_CLASS_NO_VIDEO_SELECTED" => "bb-widget-no-video-selected"
 ));
-?>
