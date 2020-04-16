@@ -160,10 +160,11 @@ class BlueBillywig
 	public function ensure_plugin_option($optionName)
 	{
 		$pluginOption = get_option($optionName);
+		$defaultValue = BB_PLUGIN_SETTINGS_DEFAULT[$optionName];
 
 		if (!isset($pluginOption) || $pluginOption == NULL) {
-			add_option($optionName, BB_PLUGIN_SETTINGS_DEFAULT[$optionName]);
-			return BB_PLUGIN_SETTINGS_DEFAULT[$optionName];
+			add_option($optionName, $defaultValue);
+			return $defaultValue;
 		}
 		return $pluginOption;
 	}
@@ -197,6 +198,11 @@ class BlueBillywig
 	//Save the plugin's options in Wordpress
 	public function save_api_options($data)
 	{
+		foreach($data as $option => $value){
+			if(empty($value)){
+				$data[$option] = 
+			}
+		}
 		update_option(BB_API_SETTINGS_GROUP, $data);
 		$this->load_api_options();
 		$this->update_rpc();

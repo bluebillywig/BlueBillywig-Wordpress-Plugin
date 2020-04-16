@@ -32,8 +32,8 @@ jQuery(document).ready(function ($) {
                 }
             },
             edit: function (props) {
-                let clipID = props.attributes.clipID;
-                let playout = props.attributes.playout == null ? "default" : props.attributes.playout;
+                var clipID = props.attributes.clipID;
+                var playout = props.attributes.playout == null ? "default" : props.attributes.playout;
                 window.bbVideoProperties = props;
 
                 if (clipID && clipID !== 0) {
@@ -90,8 +90,8 @@ jQuery(document).ready(function ($) {
                 }
             },
             save: function (props) {
-                let clipID = props.attributes.clipID;
-                let playout = props.attributes.playout;
+                var clipID = props.attributes.clipID;
+                var playout = props.attributes.playout || "default";
 
                 if (clipID && clipID !== 0) {
                     var content = el('div', {
@@ -146,13 +146,14 @@ function searchForVideos(rootElement, query) {
         url: ajaxurl,
         data: {
             'action': 'search_videos_request',
-            'query': query
+            'query': query,
+            'status': 'published'
         },
         success: function (data) {
             clearVideos(rootElement);
 
             if (data == '') {
-                wrapper.append("<pre>" + BB_STRINGS["FEEDBACK_NO_VIDEOS"] + "</pre>");
+                wrapper.append("<pre class='bb-no-result'>" + BB_STRINGS["FEEDBACK_NO_VIDEOS"] + "</pre>");
             } else {
                 wrapper.append(data);
             }
@@ -196,8 +197,8 @@ function createOptions(playouts, element) {
         value: defaultPlayout.split(':')[1],
         selected: true
     };
-    var otherPlayouts = playouts.substring(defaultPlayoutEnd + 1).split(',');
-    var optionElements = [element.createElement("option", defaultPlayout)];
+    var otherPlayouts = playouts.substring(defaultPlayoutEnd + 1).split(',') || "default";
+    var optionElements = [element.createElement("option", defaultPlayout)] || "default";
 
     for (let i = 0; i < otherPlayouts.length; i++) {
         var currentPlayout = otherPlayouts[i].split(":");
