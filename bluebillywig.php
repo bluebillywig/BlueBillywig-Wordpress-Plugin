@@ -198,9 +198,9 @@ class BlueBillywig
 	//Save the plugin's options in Wordpress
 	public function save_api_options($data)
 	{
-		foreach($data as $option => $value){
-			if(empty($value)){
-				$data[$option] = 
+		foreach ($data as $option => $value) {
+			if (empty($value)) {
+				$data[$option] = BB_PLUGIN_SETTINGS_DEFAULT[$option];
 			}
 		}
 		update_option(BB_API_SETTINGS_GROUP, $data);
