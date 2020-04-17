@@ -333,10 +333,12 @@ function register_bb_mediaclip_block_assets()
 	//Localize API-options & ajaxURL
 	$bbAPIOptions = BlueBillywig::instance()->get_api_options();
 	$publication = $bbAPIOptions[BB_API_SETTINGS_PUBLICATION];
+	$autoplay = BlueBillywig::instance()->get_plugin_option(BB_PLUGIN_SETTING_AUTOPLAY);
 
 	wp_localize_script('bb-mediaclip-block', 'bbPluginData', array(
 		"publication" => $publication,
 		"allPlayouts" => fetch_all_playouts(),
+		"autoplay" => $autoplay,
 		"ajaxurl" => admin_url('admin-ajax.php'),
 		"strings" => BB_BLOCK_STRINGS
 	));

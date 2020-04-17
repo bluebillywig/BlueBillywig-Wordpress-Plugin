@@ -5,6 +5,7 @@ jQuery(document).ready(function ($) {
         publication = bbPluginData.publication;
         allPlayouts = bbPluginData.allPlayouts;
         ajaxurl = bbPluginData.ajaxurl;
+        defaultAutoplay = bbPluginData.autoplay;
         BB_STRINGS = bbPluginData.strings;
     }
 
@@ -94,15 +95,14 @@ jQuery(document).ready(function ($) {
                 var playout = props.attributes.playout || "default";
 
                 if (clipID && clipID !== 0) {
-                    var content = el('div', {
-                            style: blockStyle,
-                            class: BB_STRINGS["ELEMENT_ID_VIDEO_WRAPPER"],
-                            id: (BB_STRINGS["ELEMENT_ID_CLIP"] + clipID)
-                        },
-                        el('script', {
-                            type: 'text/javascript',
-                            src: getClipScriptURL(clipID, playout)
-                        }));
+                    var shortcode = '[bbmediaclip clipID="' + clipID + '" playout="' + playout + '"';
+                    if (defaultAutoplay) {
+                        shortcode += ' autoplay="true"';
+                    }
+                    shortcode += ']';
+                    var content = el('p', {},
+                        shortcode);
+                    console.log(content);
                     return content;
                 }
                 return el(
@@ -124,7 +124,7 @@ jQuery(document).ready(function ($) {
 });
 
 function onSubmit(rootElement) {
-    var inputs = $(rootElement).find('input[type=text]');
+    var inputs = jQuery(rootElement).find('input[type=text]');
     var query = '';
     if (inputs.length > 0) {
         query = inputs[0].value;
@@ -134,15 +134,15 @@ function onSubmit(rootElement) {
 }
 
 function clearVideos(rootElement) {
-    var wrapper = $(rootElement).find('.' + BB_STRINGS["ELEMENT_ID_LIBRARY_WRAPPER"])[0];
+    var wrapper = jQuery(rootElement).find('.' + BB_STRINGS["ELEMENT_ID_LIBRARY_WRAPPER"])[0];
     while (wrapper.firstChild) {
         wrapper.removeChild(wrapper.firstChild);
     }
 }
 
 function searchForVideos(rootElement, query) {
-    var wrapper = $(rootElement).find('.' + BB_STRINGS["ELEMENT_ID_LIBRARY_WRAPPER"]);
-    $.ajax({
+    var wrapper = jQuery(rootElement).find('.' + BB_STRINGS["ELEMENT_ID_LIBRARY_WRAPPER"]);
+    jQuery.ajax({
         url: ajaxurl,
         data: {
             'action': 'search_videos_request',
