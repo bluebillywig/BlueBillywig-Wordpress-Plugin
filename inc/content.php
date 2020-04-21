@@ -20,7 +20,7 @@ function bb_mediaclip_shortcode($userAtts)
 	$output = '';
 	if ($useIframe === '1') {
 		$output .= '<iframe onload="this.src += \'#!referrer=\'+encodeURIComponent(location.href)+\'&realReferrer=\'+encodeURIComponent(document.referrer)" src="//' . $atts['publication'] . '.bbvms.com/p/' . $atts['playout'] . '/c/' . $atts['clipid'];
-		$output .= '.html?inheritDimensions=true" width="720" height="405"  frameborder="0" webkitallowfullscreen mozallowFullscreen oallowFullscreen msallowFullscreen allowfullscreen ></iframe>';
+		$output .= '.html?inheritDimensions=true" width="720" height="405"  frameborder="0" webkitallowfullscreen mozallowFullscreen oallowFullscreen msallowFullscreen allowfullscreen allow="autoplay"></iframe>';
 	} else {
 		$output = "<script src='https://" . $atts['publication'] . ".bbvms.com/p/" . $atts['playout'] . "/c/" . $atts['clipid'] . ".js?autoPlay=" . $atts['autoplay'] . "'></script>";
 	}
