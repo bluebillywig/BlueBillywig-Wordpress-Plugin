@@ -2,21 +2,21 @@
 
 /**
  * @package Blue Billywig
- * @version 0.3.5
+ * @version 0.3.6
  */
 /*
 Plugin Name: Blue Billywig
 Plugin URI: https://github.com/DaanRuiter/BB_wordpress_plugin
 Description: Allows for easier embedding of mediaclips and playlists
 Author: Daan Ruiter
-Version: 0.3.5
+Version: 0.3.6
 Author URI: http://daanruiter.net/
 */
 
 // Include wp interface when testing plugin output
 // require_once(dirname( __FILE__ ) . '/inc/wpInterface.php');
 
-define('BB_PLUGIN_VERSION', '0.3.5');
+define('BB_PLUGIN_VERSION', '0.3.6');
 define('BB_PLUGIN_BETA', true);
 define('BB_PLUGIN_DIR', dirname(__FILE__));
 define('BB_PLUGIN_IMG', plugin_dir_url(__FILE__) . '/img/');
