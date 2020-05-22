@@ -40,17 +40,19 @@ define('BB_PLUGIN_SETTING_SUPPRESS_NOTICES', 'bb-plugin-suppress-notices');
 define('BB_PLUGIN_SETTING_AUTOPLAY', 'bb-plugin-autoplay');
 define('BB_PLUGIN_SETTING_USE_IFRAME_EMBED', 'bb-plugin-iframe-embed');
 define('BB_PLUGIN_SETTING_AUTOPUBLISH', 'bb-plugin-autopublish');
+define('BB_PLUGIN_ACCESS_CAPABILITY', 'bb-plugin-access-capability');
 define('BB_PLUGIN_SETTINGS_DEFAULT', array(
 	BB_PLUGIN_SETTING_SUPPRESS_NOTICES => 'false',
 	BB_PLUGIN_SETTING_AUTOPLAY => 'false',
 	BB_PLUGIN_SETTING_AUTOPUBLISH => 'true',
-	BB_PLUGIN_SETTING_USE_IFRAME_EMBED => 'false'
+	BB_PLUGIN_SETTING_USE_IFRAME_EMBED => 'false',
+	BB_PLUGIN_ACCESS_CAPABILITY => 'edit_pages'
 ));
-
+//https://wordpress.org/support/article/roles-and-capabilities/#capability-vs-role-table
 
 require_once BB_PLUGIN_INC . 'uploader.php';
-require_once BB_PLUGIN_INC . "strings.php";
-require_once BB_PLUGIN_INC . "content.php";
+require_once BB_PLUGIN_INC . 'strings.php';
+require_once BB_PLUGIN_INC . 'content.php';
 require_once BB_PLUGIN_INC . 'rpcPackage.php';
 require_once BB_PLUGIN_INC . 'util.php';
 require_once BB_PLUGIN_INC . 'classes/mediaclip.class.php';
@@ -70,7 +72,6 @@ class BlueBillywig
 	{
 		if (!self::$instance) {
 			self::$instance = new BlueBillywig();
-			error_log('Created instance');
 		}
 		return self::$instance;
 	}
@@ -130,7 +131,7 @@ class BlueBillywig
 		return $this->rpc;
 	}
 
-	//Test the stored API key by trying to retreive the publication info
+	//Test the stored API key
 	public function test_stored_api_key()
 	{
 		// Try to fetch a single playout (there is always at least one due to there being a default playout)
@@ -294,11 +295,11 @@ function page_media_library()
 //Register Wordpress menus
 function register_menus()
 {
-	add_menu_page('Blue Billywig', 'Blue Billywig', 'manage_options', 'bb-plugin', 'page_home', BB_PLUGIN_IMG . 'icon.png');
-	add_submenu_page('bb-plugin', 'Settings', 'Settings', 'manage_options', 'bb-plugin');
-	add_submenu_page('bb-plugin', 'Media Library', 'Media Library', 'manage_options', 'bb-library', 'page_media_library');
-	add_submenu_page('bb-plugin', 'Upload Mediaclip', 'Upload Mediaclip', 'manage_options', 'bb-upload', 'page_upload');
-	add_submenu_page('bb-plugin', 'Generate Shortcode', 'Generate Shortcode', 'manage_options', 'bb-shortcode', 'page_shortcode');
+	add_menu_page('Blue Billywig', 'Blue Billywig', BB_PLUGIN_ACCESS_CAPABILITY, 'bb-plugin', 'page_home', BB_PLUGIN_IMG . 'icon.png');
+	add_submenu_page('bb-plugin', 'Settings', 'Settings', BB_PLUGIN_ACCESS_CAPABILITY, 'bb-plugin');
+	add_submenu_page('bb-plugin', 'Media Library', 'Media Library', BB_PLUGIN_ACCESS_CAPABILITY, 'bb-library', 'page_media_library');
+	add_submenu_page('bb-plugin', 'Upload Mediaclip', 'Upload Mediaclip', BB_PLUGIN_ACCESS_CAPABILITY, 'bb-upload', 'page_upload');
+	add_submenu_page('bb-plugin', 'Generate Shortcode', 'Generate Shortcode', BB_PLUGIN_ACCESS_CAPABILITY, 'bb-shortcode', 'page_shortcode');
 
 	if (
 		is_plugin_active(get_top_level_plugin_dir_name(dirname(__FILE__)) . '/bluebillywig.php') &&

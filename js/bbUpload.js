@@ -73,7 +73,9 @@ function initUpload() {
                 'status': status
             },
             success: function (response) {
-                response = JSON.parse(response);
+                while (typeof response !== 'object') {
+                    response = JSON.parse(response);
+                }
                 mediaclipId = response.id;
 
                 var data = {
