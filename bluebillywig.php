@@ -2,21 +2,21 @@
 
 /**
  * @package Blue Billywig
- * @version 0.3.6
+ * @version 0.3.7
  */
 /*
 Plugin Name: Blue Billywig
 Plugin URI: https://github.com/DaanRuiter/BB_wordpress_plugin
 Description: Allows for easier embedding of mediaclips and playlists
 Author: Daan Ruiter
-Version: 0.3.6
+Version: 0.3.7
 Author URI: http://daanruiter.net/
 */
 
 // Include wp interface when testing plugin output
 // require_once(dirname( __FILE__ ) . '/inc/wpInterface.php');
 
-define('BB_PLUGIN_VERSION', '0.3.6');
+define('BB_PLUGIN_VERSION', '0.3.7');
 define('BB_PLUGIN_BETA', true);
 define('BB_PLUGIN_DIR', dirname(__FILE__));
 define('BB_PLUGIN_IMG', plugin_dir_url(__FILE__) . '/img/');
@@ -282,6 +282,18 @@ function page_upload()
 	require_once BB_PLUGIN_PAGES . 'upload.php';
 }
 
+function page_import()
+{
+	if (!is_configured()) return;
+
+	wp_localize_script('bb-mediaclip-library', 'ajaxurl', admin_url('admin-ajax.php'));
+	wp_enqueue_style('bb-mediaclip-block-style', BB_PLUGIN_CSS . 'bbVideoBlock.css');
+	wp_enqueue_style('bb-media-library-style', BB_PLUGIN_CSS . 'bbMediaLibrary.css');
+	wp_enqueue_style('bb-settings-style', BB_PLUGIN_CSS . 'bbSettings.css');
+
+	require_once BB_PLUGIN_PAGES . 'import.php';
+}
+
 function page_media_library()
 {
 	if (!is_configured()) return;
@@ -299,6 +311,7 @@ function register_menus()
 	add_submenu_page('bb-plugin', 'Settings', 'Settings', BB_PLUGIN_SETTINGS_DEFAULT[BB_PLUGIN_ACCESS_CAPABILITY], 'bb-plugin');
 	add_submenu_page('bb-plugin', 'Media Library', 'Media Library', BB_PLUGIN_SETTINGS_DEFAULT[BB_PLUGIN_ACCESS_CAPABILITY], 'bb-library', 'page_media_library');
 	add_submenu_page('bb-plugin', 'Upload Mediaclip', 'Upload Mediaclip', BB_PLUGIN_SETTINGS_DEFAULT[BB_PLUGIN_ACCESS_CAPABILITY], 'bb-upload', 'page_upload');
+	add_submenu_page('bb-plugin', 'Import', 'Import', BB_PLUGIN_SETTINGS_DEFAULT[BB_PLUGIN_ACCESS_CAPABILITY], 'bb-import', 'page_import');
 	add_submenu_page('bb-plugin', 'Generate Shortcode', 'Generate Shortcode', BB_PLUGIN_SETTINGS_DEFAULT[BB_PLUGIN_ACCESS_CAPABILITY], 'bb-shortcode', 'page_shortcode');
 
 	if (
@@ -446,6 +459,7 @@ add_action('wp_ajax_search_videos_request', 'search_videos_request');
 add_action('wp_ajax_search_playouts_request', 'search_playouts_request');
 add_action('wp_ajax_search_single_video_request', 'search_single_video_request');
 add_action('wp_ajax_create_media_clip_request', 'create_media_clip_request');
+add_action('wp_ajax_fetch_import_status_request', 'fetch_import_status_request');
 add_action('wp_ajax_fetch_upload_endpoint_request', 'fetch_upload_endpoint_request');
 add_shortcode('bbmediaclip', 'bb_mediaclip_shortcode');
 

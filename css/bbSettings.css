@@ -1,10 +1,8 @@
-<<<<<<< HEAD
+
 .bb-logo-large{
     padding: 15px;
 }
 
-=======
->>>>>>> 8d3eeabbb1d3e8bf5e6f33a6e065fe1719d24b30
 .form-table{
     max-width: 1200px;
 }
@@ -41,11 +39,8 @@
 .form-table h2{
     margin-top: 15px;
     margin-bottom: 5px;
-<<<<<<< HEAD
 }
 
 select[unsaved-setting="true"], input[unsaved-setting="true"] { 
     background: rgb(251, 250, 187);
-=======
->>>>>>> 8d3eeabbb1d3e8bf5e6f33a6e065fe1719d24b30
 }

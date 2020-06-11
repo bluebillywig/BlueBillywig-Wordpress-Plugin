@@ -35,6 +35,7 @@ class Mediaclip
         $this->copyright =      $copyright   ?? PROPERTY_DEFAULTS['copyright'];
         $this->tags =           $tags        ?? PROPERTY_DEFAULTS['tags'];
         $this->status =         $status      ?? PROPERTY_DEFAULTS['status'];
+        $this->metadata = array();
 
         // Links database propertiy names with object properties
         $this->METADATA_PROPERTY_DICTIONARY = array(
@@ -127,20 +128,21 @@ class Mediaclip
 
     public function get_preview_url()
     {
-        $host = BlueBillywig::instance()->get_rpc()->getHost();
+        $host = BlueBillywig::instance()->get_rpc()->host;
         return $host . '/view/default/' . $this->id . '.html';
     }
 
     public function is_transcoding()
     {
-        if(array_key_exists('assets', $this->metadata))
-        {
-            if($this->metadata['assets'] === 'null')
-                return true;
-            if(is_array($this->metadata['assets']) && count($this->metadata['assets']) == 0)
-                return true;
-        }
-        return false;
+        return (array_key_exists('hasRunningJobs_string', $this->metadata) && $this->metadata['hasRunningJobs_string'] === 'true');
+        // if(array_key_exists('assets', $this->metadata))
+        // {
+        //     if($this->metadata['assets'] === 'null')
+        //         return true;
+        //     if(is_array($this->metadata['assets']) && count($this->metadata['assets']) == 0)
+        //         return true;
+        // }
+        // return false;
     }
 
     private function get_metadata_as_xml()

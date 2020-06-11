@@ -217,7 +217,7 @@ function render_notices()
 function render_form_start($title)
 {
 ?>
-	<h1><?php echo $title; ?></h1>
+	<h2><?php echo $title; ?></h2>
 	<form method="post" action="">
 		<table class="form-table">
 			<tbody>
@@ -239,7 +239,7 @@ function render_form_start($title)
 ?>
 	<tr>
 		<td colspan="3">
-			<h2><?php echo $title; ?></h2>
+			<h3><?php echo $title; ?></h3>
 			<p><?php echo $label; ?></p>
 		</td>
 	</tr>

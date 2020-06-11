@@ -161,7 +161,8 @@ class RPC
             }
         }
 
-        VMSUtil::debugmsg("will call fetch with uri $uri and properties: $arProps", "vmsrpc");
+        $arPorpsString = is_array($arProps) ? implode(', ', $arProps) : '';
+        VMSUtil::debugmsg("will call fetch with uri $uri and properties: $arPorpsString", "vmsrpc");
         $response = $this->fetch($uri, $arProps, $action);
         return $response;
     }
@@ -262,9 +263,9 @@ class RPC
         }
         $result = curl_exec($this->curl_handle);
         VMSUtil::debugmsg("uri: $uri delivers result: $result", "vmsrpc");
+        VMSUtil::debugmsg("FULL URL: $this->host" . $uri, "vmsrpc");
         return $result;
     }
-
 
     protected function processResponse($rawResponse)
     {

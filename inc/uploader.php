@@ -47,3 +47,11 @@ function fetch_upload_endpoint_request()
 
     die();
 }
+
+function fetch_import_status_request()
+{
+    $rpc = BlueBillywig::instance()->get_rpc();
+    $assetURL = $_REQUEST['assetURL'];
+    $url = 'sapi/mediaclip/?q=sourceid:"imported-from:' . $assetURL . '"';
+    echo $rpc->curi($url);
+}
