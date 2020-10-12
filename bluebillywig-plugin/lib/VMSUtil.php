@@ -21,13 +21,16 @@ class VMSUtil
         if (empty($logdir)) {
             $logdir = dirname(__FILE__) . '/logs';
         }
-        if (true || 0 >= $level) {
+        if (0 >= $level) {
             $currdate=date(DATE_RFC822);
             $logfile=$logdir . '/' .$cat . '.log';
             $fh = fopen($logfile, 'a');
-            fwrite($fh, "$currdate\t $message");
-            fwrite($fh, "\n");
-            fclose($fh);
+
+            if ($fh !== false) {
+                fwrite($fh, "$currdate\t $message");
+                fwrite($fh, "\n");
+                fclose($fh);
+            }
         }
     }
 

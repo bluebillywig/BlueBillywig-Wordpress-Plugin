@@ -1,7 +1,7 @@
 <?php
 define('BB_STRINGS', array(
-    "VALIDATE_API_SUCCESS_TITLE" => "API key Successfully validated",
-    "VALIDATE_API_FAIL_TITLE" => "Could not Validate API key",
+    "VALIDATE_API_SUCCESS_TITLE" => "API key successfully validated",
+    "VALIDATE_API_FAIL_TITLE" => "Could not validate API key",
     "VALIDATE_API_FAIL_LABEL" => "Please check that your Blue Billywig API settings are correct before generating shortcodes",
     "API_SETTINGS_SAVED" => "Settings Saved",
     "API_SETTINGS_TITLE" => "Blue Billywig Plugin Options",
