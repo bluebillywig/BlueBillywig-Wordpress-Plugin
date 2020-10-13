@@ -5,7 +5,8 @@ jQuery(document).ready(function ($) {
         publication = bbPluginData.publication;
         allPlayouts = bbPluginData.allPlayouts;
         ajaxurl = bbPluginData.ajaxurl;
-        defaultAutoplay = bbPluginData.autoplay;
+        defaultPlayout = bbPluginData.defaultPlayout || "default";
+        defaultAutoplay = bbPluginData.autoplay === "1" || bbPluginData.autoplay === true || bbPluginData.autoplay === 1;
         BB_STRINGS = bbPluginData.strings;
     }
 
@@ -92,7 +93,7 @@ jQuery(document).ready(function ($) {
             },
             save: function (props) {
                 var clipID = props.attributes.clipID;
-                var playout = props.attributes.playout || "default";
+                var playout = props.attributes.playout || defaultPlayout;
 
                 if (clipID && clipID !== 0) {
                     var shortcode = '[bbmediaclip clipID="' + clipID + '" playout="' + playout + '"';
@@ -102,7 +103,6 @@ jQuery(document).ready(function ($) {
                     shortcode += ']';
                     var content = el('p', {},
                         shortcode);
-                    console.log(content);
                     return content;
                 }
                 return el(

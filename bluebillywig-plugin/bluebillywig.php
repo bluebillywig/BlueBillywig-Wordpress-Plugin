@@ -348,11 +348,13 @@ function register_bb_mediaclip_block_assets()
 	$bbAPIOptions = BlueBillywig::instance()->get_api_options();
 	$publication = $bbAPIOptions[BB_API_SETTINGS_PUBLICATION];
 	$autoplay = BlueBillywig::instance()->get_plugin_option(BB_PLUGIN_SETTING_AUTOPLAY);
+	$playout = array_key_exists(BB_API_SETTINGS_DEFAULT_PLAYOUT, $bbAPIOptions) ? $bbAPIOptions[BB_API_SETTINGS_DEFAULT_PLAYOUT] : "default";
 
 	wp_localize_script('bb-mediaclip-block', 'bbPluginData', array(
 		"publication" => $publication,
 		"allPlayouts" => fetch_all_playouts(),
 		"autoplay" => $autoplay,
+		"defaultPlayout" => $playout,
 		"ajaxurl" => admin_url('admin-ajax.php'),
 		"strings" => BB_BLOCK_STRINGS
 	));
