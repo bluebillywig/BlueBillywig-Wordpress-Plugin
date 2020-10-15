@@ -2,26 +2,26 @@
 
 /**
  * @package Blue Billywig
- * @version 0.3.7
+ * @version 0.3.8
  */
 /*
 Plugin Name: Blue Billywig
-Plugin URI: https://github.com/DaanRuiter/BB_wordpress_plugin
+Plugin URI: https://github.com/bluebillywig/BB_wordpress_plugin
 Description: Allows for easier embedding of mediaclips and playlists
-Author: Daan Ruiter
-Version: 0.3.7
-Author URI: http://daanruiter.net/
+Author: Blue Billywig
+Version: 0.3.8
+Author URI: https://bluebillywig.com
 */
 
 // Include wp interface when testing plugin output
 // require_once(dirname( __FILE__ ) . '/inc/wpInterface.php');
 
-define('BB_PLUGIN_VERSION', '0.3.7');
+define('BB_PLUGIN_VERSION', '0.3.8');
 define('BB_PLUGIN_BETA', true);
 define('BB_PLUGIN_DIR', dirname(__FILE__));
-define('BB_PLUGIN_IMG', plugin_dir_url(__FILE__) . '/img/');
-define('BB_PLUGIN_JS',  plugin_dir_url(__FILE__) . '/js/');
-define('BB_PLUGIN_CSS',  plugin_dir_url(__FILE__) . '/css/');
+define('BB_PLUGIN_IMG', plugin_dir_url(__FILE__) . 'img/');
+define('BB_PLUGIN_JS',  plugin_dir_url(__FILE__) . 'js/');
+define('BB_PLUGIN_CSS',  plugin_dir_url(__FILE__) . 'css/');
 define('BB_PLUGIN_INC', BB_PLUGIN_DIR . '/inc/');
 define('BB_PLUGIN_LIB', BB_PLUGIN_DIR . '/lib/');
 define('BB_PLUGIN_PAGES', BB_PLUGIN_DIR . '/pages/');
@@ -348,11 +348,13 @@ function register_bb_mediaclip_block_assets()
 	$bbAPIOptions = BlueBillywig::instance()->get_api_options();
 	$publication = $bbAPIOptions[BB_API_SETTINGS_PUBLICATION];
 	$autoplay = BlueBillywig::instance()->get_plugin_option(BB_PLUGIN_SETTING_AUTOPLAY);
+	$playout = array_key_exists(BB_API_SETTINGS_DEFAULT_PLAYOUT, $bbAPIOptions) ? $bbAPIOptions[BB_API_SETTINGS_DEFAULT_PLAYOUT] : "default";
 
 	wp_localize_script('bb-mediaclip-block', 'bbPluginData', array(
 		"publication" => $publication,
 		"allPlayouts" => fetch_all_playouts(),
 		"autoplay" => $autoplay,
+		"defaultPlayout" => $playout,
 		"ajaxurl" => admin_url('admin-ajax.php'),
 		"strings" => BB_BLOCK_STRINGS
 	));
@@ -390,6 +392,7 @@ function add_mce_widget_script($plugin_array)
 	$plugin_array['bb_mce_mediaclip'] = BB_PLUGIN_JS . 'bbMediaclipWidget.js';
 	$playouts = fetch_all_playouts();
 
+	ob_start();
 ?>
 	<script>
 		//localize data for BB widget script
@@ -404,11 +407,15 @@ function add_mce_widget_script($plugin_array)
 		}
 	</style>
 <?php
+	ob_end_flush();
+
 	return $plugin_array;
 }
 
 function plugin_needs_configuration_notice($message = null)
 {
+	if (is_on_plugins_page()) {
+		ob_start();
 ?>
 	<div class="notice notice-error is-dismissible">
 		<p>Before you can start using the <span class="bb-plugin-name-notice">
@@ -433,6 +440,8 @@ function plugin_needs_configuration_notice($message = null)
 		}
 	</style>
 <?php
+		ob_end_flush();
+	}
 }
 
 function is_configured()
@@ -442,11 +451,6 @@ function is_configured()
 
 	if (empty($publication)) {
 		plugin_needs_configuration_notice(BB_STRINGS["NOTICE_NO_PUBLICATION"]);
-		return false;
-	}
-
-	if (!BlueBillywig::instance()->test_stored_api_key()) {
-		plugin_needs_configuration_notice(BB_STRINGS["NOTICE_NO_VALID_API_KEY"]);
 		return false;
 	}
 	return true;
