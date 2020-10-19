@@ -48,7 +48,7 @@ jQuery(document).ready(function ($) {
                 var playoutSelectElement = el('select', {
                     class: 'bbPlayoutSelect',
                     onChange: function (e) {
-                        if (props.attributes.clipID && e.target.value !== props.attributes.playout && window.bluebillywig.players && window.bluebillywig.players.length) {
+                        if (props.attributes.clipID && e.target.value !== props.attributes.playout && window.bluebillywig && window.bluebillywig.players && window.bluebillywig.players.length) {
                             for (var i = 0; i < window.bluebillywig.players.length; i++) {
                                 var player = window.bluebillywig.players[i];
                                 if (player._id === '/p/' + playout + '/c/' + clipID) {
@@ -211,11 +211,13 @@ function searchForVideos(rootElement, query) {
 
 function selectClip(clipID) {
     if (window.bbVideoProperties) {
-        var destroyId = '/p/' + (window.bbVideoProperties.attributes.playout || defaultPlayout ) + '/c/' + window.bbVideoProperties.attributes.clipID;i
-        for (var i = 0; i < window.bluebillywig.players.length; i++) {
-            var player = window.bluebillywig.players[i];
-            if (player._id === '/p/' + (window.bbVideoProperties.attributes.playout || defaultPlayout ) + '/c/' + window.bbVideoProperties.attributes.clipID) {
-                player.destruct();
+        if (window.bluebillywig && window.bluebillywig.players) {
+            var destroyId = '/p/' + (window.bbVideoProperties.attributes.playout || defaultPlayout ) + '/c/' + window.bbVideoProperties.attributes.clipID;
+            for (var i = 0; i < window.bluebillywig.players.length; i++) {
+                var player = window.bluebillywig.players[i];
+                if (player._id === '/p/' + (window.bbVideoProperties.attributes.playout || defaultPlayout ) + '/c/' + window.bbVideoProperties.attributes.clipID) {
+                    player.destruct();
+                }
             }
         }
 
