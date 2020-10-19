@@ -53,6 +53,7 @@ define('BB_BLOCK_STRINGS', array(
     "BLOCK_ICON" => "video-alt3",
     "BLOCK_SEARCH_PLACEHOLDER" => "Enter clipname..",
     "BLOCK_SEARCH_SUBMIT_LABEL" => "Search",
+    "BLOCK_AUTOPLAY_TOGGLE_LABEL" => "Autoplay",
     "BLOCK_SELECT_PLAYOUT_LABEL" => "Select playout: ",
     "BLOCK_SEARCH_CLIP_LABEL" => " Search clip: ",
     "ELEMENT_ID_VIDEO_WRAPPER" => "bb-video-wrapper",
